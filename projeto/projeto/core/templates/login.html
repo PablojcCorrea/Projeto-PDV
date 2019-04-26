@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <title>Ponto de Venda - Ideias Mais Criativas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+    </style>
+    <body class="w3-blue-gray">
+        <div class="w3-display-middle w3-light-gray w3-padding w3-round w3-card-4 w3-third">
+            <form class="w3-container" method="post">
+                <div style="margin: 10%">
+                {% csrf_token %}
+                    {{ form.non_field_errors }}
+
+                    {% for field in form %}
+                        {{ field.label_tag }}
+                        {% if field.html_name == 'password' %}
+                            <input type="password" id="{{ field.id_for_label }}" name="{{ field.html_name }}" class="w3-input">
+                        {% else %}
+                            <input type="text" id="{{ field.id_for_label }}" name="{{ field.html_name }}" class="w3-input">
+                        {% endif %}
+                        {{ field.errors }}
+                    {% endfor %}
+
+                    <div>
+                        <button type="submit" class="w3-button w3-green w3-margin-top" style="width: 100%">Entrar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

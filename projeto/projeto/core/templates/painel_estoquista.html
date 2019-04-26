@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="w3-container w3-margin">
+	<div class="w3-container w3-padding">
+		<h3>Painel do Estoquista</h3>
+	</div>
+	<div class="w3-row-padding w3-margin-bottom">
+	    <a href="{% url 'novo_produto' %}">
+	    <div class="w3-quarter">
+	      <div class="w3-container w3-green w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+	        <div class="w3-center">
+	          <i class="fa fa-plus w3-xxlarge"></i>
+	          <h4>Novo Produto</h4>
+	        </div>
+	      </div>
+	    </div>
+	    </a>
+
+	    <a href="{% url 'painel_produtos' %}">
+	    <div class="w3-quarter">
+	      <div class="w3-container w3-teal w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+	        <div class="w3-center">
+	          <i class="fa fa-search w3-xxlarge"></i>
+	          <h4>Painel de Produtos</h4>
+	        </div>
+	      </div>
+	    </div>
+	    </a>
+
+	    <a href="{% url 'novo_fornecedor' %}">
+	    <div class="w3-quarter">
+	      <div class="w3-container w3-orange w3-text-white w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+	        <div class="w3-center">
+	          <i class="fa fa-plus w3-xxlarge"></i>
+	          <h4>Novo Fornecedor</h4>
+	        </div>
+	      </div>
+	    </div>
+	    </a>
+	     <a href="{% url 'painel_fornecedores' %}">
+		    <div class="w3-quarter">
+		      <div class="w3-container w3-dark-gray w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+		        <div class="w3-center">
+		          <i class="fa fa-search w3-xxlarge"></i>
+		          <h4>Buscar Fornecedor</h4>
+		        </div>
+		      </div>
+			</div>
+		</a>
+	  </div>
+	<div class="w3-container w3-padding">
+		<h3>Produtos que precisam de reposição</h3>
+	</div>
+	<div class="w3-container w3-margin">
+		<table class="w3-table-all w3-hoverable">
+			<thead>
+				<tr class="w3-blue-grey">
+					<th>Produto</th>
+					<th>Categoria</th>
+					<th>Estoque</th>
+					<th>Estoque mínimo</th>
+					<th>Ações</th>
+				</tr>
+			</thead>
+			{% for produto in produtos %}
+			<tr class="w3-center">
+				<td><strong>{{ produto.nome_produto }}</strong></td>
+				<td>{{ produto.categoria.nome_categoria }}</td>
+				<td>{{ produto.quantidade }}</td>
+				<td>{{ produto.estoque_minimo }}</td>
+				<td>
+					<a href="{% url 'edita_produto' pk=produto.pk %}"><i class="fa fa-edit fa-fw"></i></a>
+            		&nbsp
+        		   <a href="{% url 'reposicao' pk=produto.pk %}"><i class="fa fa-plus fa-fw"></i></a>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	<div class="w3-container w3-padding">
+		<h3>Últimas 5 aquisições realizadas por {{ funcionario.0.nome_pf }}</h3>
+	</div>
+	<div class="w3-container w3-margin">
+		<table class="w3-table-all w3-hoverable">
+			<thead>
+				<tr class="w3-blue-grey">
+					<th>Data da Aquisição</th>
+					<th>Produto Adquirido</th>
+					<th>Quantidade Adquirida</th>
+				</tr>
+			</thead>
+			{% for aq in aquisicoes %}
+			<tr class="w3-center">
+				<td><strong>{{ aq.data_aquisicao }}</strong></td>
+				<td>{{ aq.produto_adquirido.nome_produto }}</td>
+				<td>{{ aq.quantidade_produto }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+
+{% endblock %}

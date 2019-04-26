@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<script>
+
+		function habilitaDesabilitaPJ(valor) {
+			document.getElementById("id_razao_social").disabled = valor;
+			document.getElementById("id_nome_fantasia").disabled = valor;
+			document.getElementById("id_contato").disabled = valor;
+			document.getElementById("id_insc_estadual").disabled = valor;
+
+			document.getElementById("id_razao_social").required = !valor;
+			document.getElementById("id_nome_fantasia").required = !valor;
+			document.getElementById("id_contato").required = !valor;
+			document.getElementById("id_insc_estadual").required = !valor;
+		}
+
+		function habilitaDesabilitaPF(valor) {
+			document.getElementById("id_nome_pf").disabled = valor;
+			document.getElementById("id_sobrenome_pf").disabled = valor;
+			document.getElementById("id_data_nascimento").disabled = valor;
+			document.getElementById("id_documento").disabled = valor;
+			document.getElementById("id_uf_documento").disabled = valor;
+
+			document.getElementById("id_nome_pf").required = !valor;
+			document.getElementById("id_sobrenome_pf").required = !valor;
+			document.getElementById("id_data_nascimento").required = !valor;
+			document.getElementById("id_documento").required = !valor;
+			document.getElementById("id_uf_documento").required = !valor;
+
+		}
+		function verificaPessoa() {
+			var cpf_cnpj = document.getElementById("CPF_CNPJ").value;
+			var num = cpf_cnpj.length;
+			if (num == 14) {
+				document.getElementById("pessoa_fisica").style.display = "block";
+				habilitaDesabilitaPF(false);
+				document.getElementById("pessoa_juridica").style.display = "none";
+				habilitaDesabilitaPJ(true)
+			} else {
+				if (num == 18) {
+					document.getElementById("pessoa_fisica").style.display = "none";
+					habilitaDesabilitaPF(true)
+					document.getElementById("pessoa_juridica").style.display = "block";
+					habilitaDesabilitaPJ(false)
+				} else {
+					document.getElementById("pessoa_fisica").style.display = "none";
+					habilitaDesabilitaPF(true)
+					document.getElementById("pessoa_juridica").style.display = "none";
+					habilitaDesabilitaPJ(true)
+				}
+			}
+		}
+	</script>
+
+	<div class="w3-container w3-light-gray">
+  		<h2>Cadastro de Clientes</h2>
+	</div>
+	<form class="w3-row-padding" method="POST">
+		<div class="w3-container w3-border">
+			{% csrf_token %}
+				<p>
+					<div class="w3-quarter w3-margin">
+						<label for="CPF_CNPJ">CPF/CNPJ</label>
+						<input id="CPF_CNPJ" name="CPF_CNPJ" placeholder="Informe o CPF ou o CNPJ" onblur="verificaPessoa();" class="w3-input">
+					</div>
+					<div class="w3-quarter w3-margin">
+						<label for="telefone">Telefone/Celular</label>
+						<input id="telefone" name="telefone" placeholder="Informe um telefone de contato" onblur="" class="w3-input">
+					</div>
+					<div class="w3-quarter w3-margin">
+						<label for="email">E-mail</label>
+						<input type="email" id="email" name="email" placeholder="Informe um e-mail" class="w3-input">
+					</div>
+				</p>
+				<p>
+					<div id="pessoa_fisica" class="w3-container pf" style="display: none;">
+						{% for element in formPF %}
+						<div class="w3-quarter w3-margin">
+							{{ element.errors }}
+							{{ element.label_tag }}
+							{{ element }}
+						</div>
+						{% endfor %}
+					</div>
+				</p>
+				<p>
+					<div id="pessoa_juridica" class="w3-container" style="display: none;">
+						{% for element in formPJ %}
+						<div class="w3-quarter w3-margin">
+							{{ element.errors }}
+							{{ element.label_tag }}
+							{{ element }}
+						</div>
+						{% endfor %}
+					</div>
+				</p>
+		</div>
+
+		<div class="w3-container w3-border">
+				<p>
+				<div class="w3-container">
+					{% for element in formEnd %}
+					<div class="w3-quarter w3-margin">
+						{{ element.errors }}
+						{{ element.label_tag }}
+						{{ element }}
+					</div>
+					{% endfor %}
+				</div>
+				</p>
+		</div>
+		<br>
+		<div class="w3-half">
+			<button class="w3-button w3-green" style="width: 100px">Salvar</button>
+		<div>
+	</form>
+
+<script type="text/javascript">
+	habilitaDesabilitaPJ(true);
+	habilitaDesabilitaPF(true);
+</script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-container">
+  		<h2>Cadastro de Fornecedores</h2>
+	</div>
+	<form class="w3-row-padding" method="POST">
+		<div class="w3-container w3-border">
+			{% csrf_token %}
+				<p>
+					<div class="w3-quarter w3-margin">
+						<label for="CPF_CNPJ">CPF/CNPJ</label>
+						<input id="CPF_CNPJ" name="CPF_CNPJ" placeholder="Informe o CPF ou o CNPJ" class="w3-input">
+					</div>
+					<div class="w3-quarter w3-margin">
+						<label for="telefone">Telefone/Celular</label>
+						<input id="telefone" name="telefone" placeholder="Informe um telefone de contato" onblur="" class="w3-input">
+					</div>
+					<div class="w3-quarter w3-margin">
+						<label for="email">E-mail</label>
+						<input type="email" id="email" name="email" placeholder="Informe um e-mail" class="w3-input">
+					</div>
+				</p>
+				<p>
+					<div id="pessoa_juridica" class="w3-container">
+						{% for element in formPJ %}
+						<div class="w3-third w3-margin">
+							{{ element.errors }}
+							{{ element.label_tag }}
+							{{ element }}
+						</div>
+						{% endfor %}
+					</div>
+				</p>
+		</div>
+
+		<div class="w3-container w3-border">
+				<p>
+				<div class="w3-container">
+					{% for element in formEnd %}
+					<div class="w3-quarter w3-margin">
+						{{ element.errors }}
+						{{ element.label_tag }}
+						{{ element }}
+					</div>
+					{% endfor %}
+				</div>
+				</p>
+		</div>
+		<br>
+		<div class="w3-half">
+			<button class="w3-button w3-green" style="width: 100px">Salvar</button>
+		<div>
+	</form>
+
+<script type="text/javascript">
+	habilitaDesabilitaPJ(true);
+	habilitaDesabilitaPF(true);
+</script>
+{% endblock %}

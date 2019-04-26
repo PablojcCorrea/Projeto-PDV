@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<form class="w3-row-padding w3-light-gray w3-round w3-card-4" method="POST">
+			<div class="w3-container">
+				<h4>Informe seus dados:</h4>
+				{% csrf_token %}
+					<p>
+					<div class="w3-container">
+						{% for element in form %}
+							{% if element.html_name == 'password1' %}
+								<div class="w3-container">
+									<h4>Informe a senha desejada para este usuário:</h4>
+									<div class="w3-third w3-margin">
+										{{ element.errors }}
+										{{ element.label_tag }}
+										{{ element }}
+									</div>
+							{% elif element.html_name == 'password2' %}
+									<div class="w3-third w3-margin">
+										{{ element.errors }}
+										{{ element.label_tag }}
+										{{ element }}
+									</div>
+								</div>
+							{% else %}
+								<div class="w3-quarter w3-margin">
+									{{ element.errors }}
+									{{ element.label_tag }}
+									{{ element }}
+								</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+					</p>
+			</div>
+			<hr>
+			<div class="w3-container">
+				<h4>Informe seu endereço:</h4>
+				{% csrf_token %}
+					<p>
+					<div class="w3-container">
+						{% for element in form2 %}
+						<div class="w3-quarter w3-margin">
+							{{ element.errors }}
+							{{ element.label_tag }}
+							{{ element }}
+						</div>
+						{% endfor %}
+					</div>
+					</p>
+			</div>
+			<br>
+			<div class="w3-half w3-margin">
+				<button class="w3-button w3-green" style="width: 100px">Salvar</button>
+			<div>
+		</form>
+{% endblock %}
