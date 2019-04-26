@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#cliente").autocomplete({
+			source: function(request, response) {
+				$.ajax( {
+					url: "{% url 'nova_venda' %}",
+					dataType: "json",
+					data: {
+						cliente: request.term
+					},
+					success: function(data) {
+						response(data);
+					}
+				})
+			},
+			minLength: 3,
+		});
+		});
+
+	</script>
+	<div class="w3-container">
+  		<h2>Registrar Venda</h2>
+	</div>
+	
+	<form class="w3-container" method="POST">
+		{% csrf_token %}
+		<div class="w3-container">
+			<h3>Olá, {{ vendedor.0.nome_pf }} {{ vendedor.0.sobrenome_pf }}. Selecione o Cliente:</h2>
+			<div class="w3-container">
+	  			<input id="cliente" name="cliente" type="text" class="w3-input w3-threequarter">
+	  			<button class="w3-button w3-green w3-quarter" name="adicionar_cliente" value="add_cliente"><i class="fa fa-plus"></i></button>
+			</div>
+			{% for item in cliente %}
+  			<table class="w3-table-all w3-hoverable">
+				<thead>
+					<tr class="w3-blue-grey">
+						<th>Nome</th>
+						<th>E-mail</th>
+						<th>CPF/CNPJ</th>
+						<th class="w3-center">Remover</th>
+					</tr>
+				</thead>
+				
+				<tr>
+		          {% if item.nome_pf%}
+		            <td>{{ item.nome_pf|add:" "|add:item.sobrenome_pf }}</td>
+		          {% elif item.razao_social %}
+		            <td>{{ item.razao_social }}</td>
+		          {% endif %}
+		          <td>{{ item.email }}</td>
+		          <td>{{ item.CPF_CNPJ }}</td>
+		          <td class="w3-center">
+		            <button class="w3-button w3-red" name="remover" value="remover"><i class="fa fa-remove fa-fw"></i></button>
+		          </td>
+		        </tr>
+			</table>
+			{% endfor %}
+			<hr>
+			{% if cliente %}
+				<button class="w3-button w3-green w3-quarter" name="continuar" value="{{ cliente.0.CPF_CNPJ }}">Continuar</button>
+			{% else %}
+				<button class="w3-button w3-green w3-quarter" name="continuar" value="null">Continuar</button>
+			{% endif %}
+		</div>
+		<hr>
+	</form>
+{% endblock %}

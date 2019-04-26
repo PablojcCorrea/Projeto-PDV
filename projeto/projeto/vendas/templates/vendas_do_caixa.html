@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<!-- Header -->
+  <header class="w3-container" style="padding-top:22px">
+    <h5><b><i class="fa fa-dashboard"></i> Painel dos Produtos</b></h5>
+  </header>
+
+  <div class="w3-row-padding w3-margin-bottom">
+    <a href="{% url 'vendas_do_caixa' pk=caixa.pk %}">
+    <div class="w3-quarter">
+      <div class="w3-container w3-green w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+        <div class="w3-center">
+          <i class="fa fa-search w3-xxlarge"></i>
+          <h4>Consultar Vendas</h4>
+        </div>
+      </div>
+    </div>
+    </a>
+
+    <a href="{% url 'painel_movimentacoes' pk=caixa.pk %}">
+    <div class="w3-quarter">
+      <div class="w3-container w3-teal w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+        <div class="w3-center">
+          <i class="fa fa-search w3-xxlarge"></i>
+          <h4>Consultar Transações</h4>
+        </div>
+      </div>
+    </div>
+    </a>
+
+    <a href="{% url 'caixa' %}">
+    <div class="w3-quarter">
+      <div class="w3-container w3-orange w3-text-white w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+        <div class="w3-center">
+          <i class="fa fa-plus w3-xxlarge"></i>
+          <h4>Retornar ao Caixa</h4>
+        </div>
+      </div>
+    </div>
+    </a>
+
+  </div>
+
+  <form id="searchform" action="" method="POST" accept-charset="utf-8" hidden>
+    {% csrf_token %}
+    <div class="w3-container">
+      <h2>Buscar Vendas</h2>
+      <div class="w3-container">
+        <div class="w3-half">
+          <label>Data inicial</label>
+          <div>
+            <div class="w3-container w3-threequarter">
+              <input name="data_inicial" type="date" class="w3-input">
+            </div> 
+          </div>
+        </div>
+        <div class="w3-half">
+          <label>Data final</label>
+          <div>
+            <div class="w3-container w3-threequarter">
+              <input name="data_final" type="date" class="w3-input">
+            </div>
+            <div class="w3-container w3-quarter">
+              <button class="w3-button w3-green" name="adicionar_produto" value="add_produto"><i class="fa fa-plus"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <form method="get" name="buscar_venda" action="{% url 'vendas_do_caixa' pk=caixa.pk %}">
+    <h2>Buscar Vendas</h2>
+    <div>
+      <input style="position: absolute;" class="w3-input" id="searchbox" name="q" type="text" placeholder="Informe o nome ou o CPF do Cliente ou do Vendedor">
+      <button style="width: 40px; position: relative; float: right;" class="w3-input" type="submit"><i class="fa fa-search"></i></button>
+    </div>
+  </form>
+    <br><br>
+
+    <table class="w3-table-all w3-hoverable">
+      <thead>
+        <tr class="w3-blue-grey">
+          <th>Vendedor</th>
+          <th>Cliente</th>
+          <th>Valor Total</th>
+          <th>Horário</th>
+          {% if funcionario.tipo_funcionario == "GER" %}
+            <th>Ações</th>
+          {% endif %}
+        </tr>
+      </thead>
+      {% for venda in vendas %}
+        <tr>
+          <td>{{ venda.vendedor.nome_pf }}</td>
+          {% if venda.cliente_pf %}
+            <td>{{ venda.cliente_pf.nome_pf }}</td>
+          {% elif venda.cliente_pj %}
+            <td>{{ venda.cliente_pf.nome_pf }}</td>
+          {% else %}
+            <td>Sem Cliente</td>
+          {% endif %}
+          <td>{{ venda.valor_total }}</td>
+          <td>{{ venda.criado_em }}</td>
+          {% if funcionario.tipo_funcionario == "GER" %}
+          <td>
+            <a href="#"><i class="fa fa-edit fa-fw"></i></a>
+            &nbsp
+            <a href="#"><i class="fa fa-remove fa-fw"></i></a>
+          </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </table>
+    <br>
+  <ul>
+        {% if page_obj.has_previous %}
+        <li>
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}" title="">Anterior</a>
+        </li>
+        {% endif %}
+        {% for page in paginator.page_range %}
+        <li{% if page == page_obj.number %} class="active"{% endif %}>
+            <a href="?page={{ page }}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}" title="">{{ page }}</a>
+        </li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li>
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}" title="">Próxima</a>
+        </li>
+        {% endif %}
+    </ul>
+{% endblock %}

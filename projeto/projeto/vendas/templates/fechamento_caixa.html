@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<hr>
+	<div id="relatorio_caixa" class="w3-container w3-margin w3-border">
+		<div>
+			<div class="w3-center">
+				<h1>{{ empresa.0.razao_social }}</h1>
+			</div>
+			<table class="w3-table-all">
+				<thead>
+					<tr class="w3-blue-grey">
+						<th colspan="2"class=" w3-border">Informações da Empresa</th>
+					</tr>
+				</thead>
+				<tr>
+					<td colspan="2" class="w3-border">
+						TELEFONE: {{ empresa.0.telefone }}
+						<br>
+						{{ empresa.0.endereco.logradouro}}, {{ empresa.0.endereco.numero}} - {{ empresa.0.endereco.bairro}} CEP {{ empresa.0.endereco.cep}} {{ empresa.0.endereco.cidade}} - {{ empresa.0.endereco.estado}}
+						<br>
+						EMAIL: {{ empresa.0.email }}
+					</td>
+				</tr>
+				<tr class="w3-white">
+					<td class="w3-border">
+						CNPJ: {{ empresa.0.CPF_CNPJ }}
+					</td>
+					<td class="w3-border">
+						INSC. ESTADUAL: {{ empresa.0.insc_estadual }}
+					</td>
+				</tr>
+			</table>
+			<hr>
+			<table class="w3-table-all">
+				<thead>
+					<tr class="w3-blue-grey">
+						<th class=" w3-border">Caixa aberto por:</th>
+						<th class=" w3-border">Caixa aberto em:</th>
+						<th class=" w3-border">Caixa fechado por:</th>
+						<th class=" w3-border">Caixa fechado em:</th>
+					</tr>
+				</thead>
+				<tr>
+					<td class="w3-border">
+						{{ caixa.0.aberto_por.nome_pf }}
+					</td>
+					<td class="w3-border">
+						{{ caixa.0.aberto_em }}
+					</td>
+					<td class="w3-border">
+						{{ caixa.0.fechado_por.nome_pf }}
+					</td>
+					<td class="w3-border">
+						{{ caixa.0.fechado_em }}
+					</td>
+				</tr>
+			</table>
+			<hr>
+			<div class="w3-half">
+				<table class="w3-table-all w3-hoverable">
+					<thead>
+						<tr class="w3-blue-grey">
+							<th colspan="2">Informações gerais:</th>
+						</tr>
+					</thead>
+					<tr class="w3-center">
+						<td><strong>Fundo do caixa:</strong></td>
+						<td>R$ {{ caixa.0.fundo_caixa }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Sangrias:</strong></td>
+						<td>R$ {{ sangria }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Despesas:</strong></td>
+						<td>R$ {{ despesa }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Dinheiro no caixa:</strong></td>
+						<td>R$ {{ dinheiro_caixa }}</td>
+					</tr>
+				</table>
+			</div>
+			<div class="w3-half">
+				<table class="w3-table-all w3-hoverable">
+					<thead>
+						<tr class="w3-blue-grey">
+							<th colspan="2">Vendas por forma de pagamento:</th>
+						</tr>
+					</thead>
+					<tr class="w3-center">
+						<td><strong>Dinheiro</strong></td>
+						<td>R$ {{ total_dinheiro }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Débito</strong></td>
+						<td>R$ {{ total_debito }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Crédito</strong></td>
+						<td>R$ {{ total_credito }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Valor Total</strong></td>
+						<td><strong>R$ {{ total_caixa }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<hr>
+			<div class="w3-container">
+				<h4>Listagem das Vendas</h4>
+			</div>
+			<table class="w3-table-all w3-hoverable">
+				<thead>
+					<tr class="w3-blue-grey">
+						<th>Cliente</th>
+						<th>Vendedor</th>
+						<th>Valor</th>
+						<th>Horário</th>
+					</tr>
+				</thead>
+				{% for venda in vendas %}
+				<tr class="w3-center">
+					{% if venda.cliente_pf %}
+						<td>{{ venda.cliente_pf.nome_pf }} {{ venda.cliente_pf.sobrenome_pf }} </td>
+					{% elif venda.cliente_pj %}
+						<td>{{ venda.cliente_pj.razao_social }}</td>
+					{% else %}
+						<td>Cliente sem cadastro</td>
+					{% endif %}
+					<td>{{ venda.vendedor.nome_pf }}</td>
+					<td>R$ {{ venda.valor_total }}</td>
+					<td>{{ venda.criado_em }}</td>
+				</tr>
+				{% endfor %}
+			</table>
+			<hr>
+			<div class="w3-container">
+				<h4>Listagem dos produtos vendidos</h4>
+			</div>
+			<table class="w3-table-all w3-hoverable">
+				<thead>
+					<tr class="w3-blue-grey">
+						<th>Produto</th>
+						<th>Quantidade vendida</th>
+						<th>Valor</th>
+					</tr>
+				</thead>
+				{% for produto in produtos %}
+				<tr class="w3-center">
+					<td>{{ produto.produto.nome_produto }} </td>
+					<td>{{ produto.quantidade_produto }}</td>
+					<td>R$ {{ produto.valor_produto }}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+{% endblock %}

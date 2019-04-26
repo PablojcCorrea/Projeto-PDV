@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<hr>
+	<div id="nota_fiscal" class="w3-container w3-margin w3-padding">
+		<div class="w3-container w3-border">
+			<div class="w3-center">
+				<h1>{{ empresa.0.razao_social }}</h1>
+			</div>
+			<div>
+				Loja de presentes e vendas no varejo
+			</div>
+			<br>
+			<div id="dados_empresa">
+				TELEFONE: {{ empresa.0.telefone }}
+				<br>
+				{{ empresa.0.endereco.logradouro}}, {{ empresa.0.endereco.numero}} - {{ empresa.0.endereco.bairro}} CEP {{ empresa.0.endereco.cep}} {{ empresa.0.endereco.cidade}} - {{ empresa.0.endereco.estado}}
+				<br>
+				EMAIL: {{ empresa.0.email }}
+				<br><br>
+				<div class="w3-border w3-half">CNPJ: {{ empresa.0.CPF_CNPJ }}</div>
+				<div class="w3-border w3-half">INSC. ESTADUAL: {{ empresa.0.insc_estadual }}</div>
+			</div>
+			<br>
+			<div id="dados_venda">
+				<div class="w3-border w3-half">
+					COMPROVANTE NÃO FISCAL
+				</div>
+				<div class="w3-half">
+					<div class="w3-border w3-quarter">
+						Nº {{ venda.0.id }}
+					</div>
+					<div class="w3-border w3-threequarter">
+						DATA: {{ venda.0.criado_em.date }}
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div id="dados_cliente">
+				{% if venda.0.cliente_pf %}
+				<div class="w3-border-bottom w3-half">
+					<strong>NOME:</strong> {{ venda.0.cliente_pf.nome_pf }} {{ venda.0.cliente_pf.sobrenome_pf }}
+				</div>
+				<div class="w3-border-bottom w3-half">
+					<strong>TELEFONE:</strong> {{ venda.0.cliente_pf.telefone }}
+				</div>
+				<div class="w3-border-bottom">
+					<strong>ENDEREÇO:</strong> {{ venda.0.cliente_pf.endereco.logradouro }}, {{ venda.0.cliente_pf.endereco.numero }} - {{ venda.0.cliente_pf.endereco.bairro }}
+				</div>
+				<div class="w3-border-bottom w3-half">
+					<strong>CIDADE:</strong> {{ venda.0.cliente_pf.endereco.cidade }}
+				</div>
+				<div class="w3-border-bottom w3-quarter">
+					<strong>ESTADO:</strong> {{ venda.0.cliente_pf.endereco.estado }}
+				</div>
+				<div class="w3-border-bottom w3-quarter">
+					<strong>CEP:</strong> {{ venda.0.cliente_pf.endereco.cep }}
+				</div>
+				<div class="w3-border-bottom w3-third">
+					<strong>CPF:</strong> {{ venda.0.cliente_pf.CPF_CNPJ }}
+				</div>
+				<div class="w3-border-bottom w3-third">
+					<strong>RG:</strong> {{ venda.0.cliente_pf.documento }}
+				</div>
+				<div class="w3-border-bottom w3-third">
+					<strong>UF:</strong> {{ venda.0.cliente_pf.uf_documento }}
+				</div>
+				<div class="w3-border-bottom">
+					<strong>EMAIL:</strong> {{ venda.0.cliente_pf.email }}
+				</div>
+				{% elif venda.0.cliente_pj %}
+				<div class="w3-border-bottom w3-half">
+					<strong>NOME:</strong> {{ venda.0.cliente_pj.razao_social }}
+				</div>
+				<div class="w3-border-bottom w3-half">
+					<strong>TELEFONE:</strong> {{ venda.0.cliente_pj.telefone }}
+				</div>
+				<div class="w3-border-bottom">
+					<strong>ENDEREÇO:</strong> {{ venda.0.cliente_pj.endereco.logradouro }}, {{ venda.0.cliente_pj.endereco.numero }} - {{ venda.0.cliente_pj.endereco.bairro }}
+				</div>
+				<div class="w3-border-bottom w3-half">
+					<strong>CIDADE:</strong> {{ venda.0.cliente_pj.endereco.cidade }}
+				</div>
+				<div class="w3-border-bottom w3-quarter">
+					<strong>ESTADO:</strong> {{ venda.0.cliente_pj.endereco.estado }}
+				</div>
+				<div class="w3-border-bottom w3-quarter">
+					<strong>CEP:</strong> {{ venda.0.cliente_pj.endereco.cep }}
+				</div>
+				<div class="w3-border-bottom w3-half">
+					<strong>CNPJ:</strong> {{ venda.0.cliente_pj.CPF_CNPJ }}
+				</div>
+				<div class="w3-border-bottom w3-half">
+					<strong>INSC. ESTADUAL:</strong> {{ venda.0.cliente_pj.insc_estadual }}
+				</div>
+				<div class="w3-border-bottom">
+					<strong>EMAIL:</strong> {{ venda.0.cliente_pj.email }}
+				</div>
+				{% else %}
+				<div class="w3-border-bottom w3-half">
+					<strong>NOME:</strong>
+				</div>
+				<div class="w3-border-bottom w3-half">
+					<strong>TELEFONE:</strong>
+				</div>
+				<div class="w3-border-bottom">
+					<strong>ENDEREÇO:</strong> 
+				</div>
+				<div class="w3-border-bottom w3-half">
+					<strong>CIDADE:</strong> 
+				</div>
+				<div class="w3-border-bottom w3-quarter">
+					<strong>ESTADO:</strong> 
+				</div>
+				<div class="w3-border-bottom w3-quarter">
+					<strong>CEP:</strong> 
+				</div>
+				<div class="w3-border-bottom w3-third">
+					<strong>CPF:</strong> 
+				</div>
+				<div class="w3-border-bottom w3-third">
+					<strong>RG:</strong> 
+				</div>
+				<div class="w3-border-bottom w3-third">
+					<strong>UF:</strong> 
+				</div>
+				<div class="w3-border-bottom w3-half">
+					<strong>CNPJ:</strong> 
+				</div>
+				<div class="w3-border-bottom w3-half">
+					<strong>INSC. ESTADUAL:</strong> 
+				</div>
+				<div class="w3-border-bottom">
+					<strong>EMAIL:</strong> 
+				</div>
+				{% endif %}
+			</div>
+			<hr>
+			<div id="dados_produtos">
+				<table class="w3-table-all w3-light-grey w3-border">
+					<thead>
+						<tr class="w3-grey">
+							<th class=" w3-border">QTDE</th>
+							<th class=" w3-border">DISCRIMINAÇÃO DOS PRODUTOS</th>
+							<th class=" w3-border">VALOR UNT.</th>
+						</tr>
+					</thead>
+					{% for produto in produtos %}
+					<tr class="w3-light-grey">
+						<td class="w3-border">{{ produto.quantidade_produto }}</td>
+						<td class="w3-border">{{ produto.produto.nome_produto}}</td>
+						<td>{{ produto.valor_produto }}</td>
+					</tr>
+					{% endfor %}
+					<tr class="w3-light-grey">
+						<td></td>
+						<td class="w3-right">Total</td>
+						<td class="w3-border">{{ venda.0.valor_total }}</td>
+					</tr>
+				</table>
+			</div>
+			<hr>
+		</div>
+	</div>
+{% endblock %}

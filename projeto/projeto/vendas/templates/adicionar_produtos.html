@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<script type="text/javascript">
+		var url = "{% url 'adicionar_produtos' 0 %}".replace('0', "{{ venda.pk }}")
+		$(document).ready(function(){
+			$("#produto").autocomplete({
+			source: function(request, response) {
+				$.ajax( {
+					url: url,
+					dataType: "json",
+					data: {
+						produto: request.term
+					},
+					success: function(data) {
+						response(data);
+					}
+				})
+			},
+			minLength: 3,
+		});
+		});
+	</script>
+
+	<div class="w3-container">
+  		<h2>Registrar Venda</h2>
+	</div>
+	<form class="w3-container" method="POST">
+		{% csrf_token %}
+		<div class="w3-container">
+			<h3>Adicionar Produtos</h3>
+			<div class="w3-container">
+				<div class="w3-half">
+		  			<input id="produto" name="produto" type="text" class="w3-input" placeholder="Informe o nome do produto">
+				</div>
+				<div class="w3-half">
+					<div class="w3-container w3-threequarter">
+		  				<input name="quantidade" type="number"class="w3-input" placeholder="Informe quantos serão adicionados">
+					</div>
+					<div class="w3-container w3-quarter">
+		  				<button class="w3-button w3-green" name="adicionar_produto" value="add_produto"><i class="fa fa-plus"></i></button>
+		  			</div>
+				</div>
+				<hr>
+	  			<table class="w3-table-all w3-hoverable">
+					<thead>
+						<tr class="w3-blue-grey">
+							<th>Produto</th>
+							<th>Quantidade</th>
+							<th>Valor Unitário</th>
+							<th>Alterar Quantidade</th>
+						</tr>
+					</thead>
+					{% for item in produtos %}
+					<tr>
+						<td>{{ item.produto.nome_produto }}</td>
+						<td>{{ item.quantidade_produto }}</td>
+						<td>{{ item.valor_produto }}</td>
+						<td>
+							<button class="w3-button w3-green" name="aumenta" value="{{ item.pk }}"><i class="fa fa-plus fa-fw"></i></button>
+							&nbsp
+							<button class="w3-button w3-red" name="diminui" value="{{ item.pk }}"><i class="fa fa-minus fa-fw"></i></button>
+						</td>
+					</tr>
+					{% endfor %}
+					<tr>
+						<td><strong>Valor total:</strong></td>
+						<td></td>
+						<td><strong>{{ venda.valor_total }}</strong></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="w3-container">
+			<h3>Adicionar Formas de Pagamento</h3>
+			<div class="w3-container">
+		  		<div class="w3-container">
+				<div class="w3-half">
+		  			<select id="pagamentos" name="pagamentos" class="w3-select">
+		  				<option selected="selected" value="0">Forma de Pagamento</option>
+		  				<option value="DI">Dinheiro</option>
+		  				<option value="CD">Débito</option>
+		  				<option value="CC">Crédito</option>
+		  			</select>
+				</div>
+				<div class="w3-half">
+					<div class="w3-container w3-threequarter">
+		  				<input name="valor_pago" type="number"class="w3-input" placeholder="Informe o valor">
+					</div>
+					<div class="w3-quarter">
+		  				<button class="w3-button w3-green" name="adicionar_pagamento" value="add_pagamento"><i class="fa fa-plus"></i></button>
+		  			</div>
+				</div>
+				<hr>
+				<div class="w3-half">
+				<table class="w3-table-all w3-hoverable">
+					<thead>
+						<tr class="w3-blue-grey">
+							<th>Forma de Pagamento</th>
+							<th>Valor Pago</th>
+							<th>Remover</th>
+						</tr>
+					</thead>
+					{% for item in pagamentos %}
+					<tr>
+						<td>{{ item.tipo_pagamento }}</td>
+						<td>{{ item.valor_total }}</td>
+						<td>
+							<button class="w3-button w3-red" name="remover_pagamento" value="{{ item.pk }}"><i class="fa fa-trash fa-fw"></i></button>
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+				</div>
+				<div class="w3-quarter w3-margin-left">
+				<table class="w3-table-all w3-hoverable">
+					<tr>
+						<td><strong>Total Pago:</strong></td>
+						<td><strong>{{ valor_pago }}</strong></td>
+					</tr>
+					{% if falta_pagar <= 0 %}
+					<tr>
+						<td><strong>Troco:</strong></td>
+						<td><strong>{{ falta_pagar }}</strong></td>
+					</tr>
+					{% else %}
+					<tr>
+						<td><strong>Falta Pagar:</strong></td>
+						<td><strong>{{ falta_pagar }}</strong></td>
+					</tr>
+					{% endif %}
+				</table>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="w3-container">
+			<div class="w3-container">
+				<button class="w3-button w3-red w3-left" name="cancelar_venda" value="cancelar_venda">Cancelar Venda</button>
+				<button class="w3-button w3-green w3-right" name="finalizar_venda" value="finalizar_venda">Confirmar Venda</button>
+			</div>
+		</div>
+	</form>
+{% endblock %}

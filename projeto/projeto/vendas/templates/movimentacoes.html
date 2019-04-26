@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<!-- Header -->
+  <header class="w3-container" style="padding-top:22px">
+    <h5><b><i class="fa fa-dashboard"></i> Painel dos Produtos</b></h5>
+  </header>
+
+  <div class="w3-row-padding w3-margin-bottom">
+    <a href="{% url 'vendas_do_caixa' pk=caixa.pk %}">
+    <div class="w3-quarter">
+      <div class="w3-container w3-green w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+        <div class="w3-center">
+          <i class="fa fa-search w3-xxlarge"></i>
+          <h4>Consultar Vendas</h4>
+        </div>
+      </div>
+    </div>
+    </a>
+
+    <a href="{% url 'painel_movimentacoes' pk=caixa.pk %}">
+    <div class="w3-quarter">
+      <div class="w3-container w3-teal w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+        <div class="w3-center">
+          <i class="fa fa-search w3-xxlarge"></i>
+          <h4>Consultar Transações</h4>
+        </div>
+      </div>
+    </div>
+    </a>
+
+    <a href="{% url 'caixa' %}">
+    <div class="w3-quarter">
+      <div class="w3-container w3-orange w3-text-white w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+        <div class="w3-center">
+          <i class="fa fa-plus w3-xxlarge"></i>
+          <h4>Retornar ao Caixa</h4>
+        </div>
+      </div>
+    </div>
+    </a>
+
+  </div>
+
+
+  <div class="w3-container">
+      <h2>Buscar Produtos</h2>
+  </div>
+  <form id="searchform" action="{% url 'painel_movimentacoes' pk=caixa.pk %}" method="get" accept-charset="utf-8">
+        <div>
+          <input style="position: absolute;" class="w3-input" id="searchbox" name="q" type="text" placeholder="Buscar">
+          <button style="width: 40px; position: relative; float: right;" class="w3-input" type="submit"><i class="fa fa-search"></i></button>
+        </div>
+  </form>
+
+    <br><br>
+
+    <table class="w3-table-all w3-hoverable">
+      <thead>
+        <tr class="w3-blue-grey">
+          <th>Movimentação</th>
+          <th>Descrição</th>
+          <th>Valor</th>
+          <th>Horário</th>
+          <th>Funcionário</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      {% for item in object_list %}
+        <tr>
+          {% if item.tipo_movimentacao == "D" %}
+            <td>Despesa</td>
+          {% elif item.tipo_movimentacao == "S" %}
+            <td>Sangria</td>
+          {% endif %}
+          <td>{{ item.descricao_movimentacao }}</td>
+          <td>{{ item.valor_movimentacao }}</td>
+          <td>{{ item.horario_movimentacao }}</td>
+          <td>{{ item.funcionario.nome_pf }}</td>
+          <td>
+            <a href="{% url 'edita_movimentacao' pk=item.pk id_caixa=caixa.pk%}"><i class="fa fa-edit fa-fw"></i></a>
+            &nbsp
+            <a href="#"><i class="fa fa-remove fa-fw"></i></a>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+    <br>
+  <ul>
+        {% if page_obj.has_previous %}
+        <li>
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}" title="">Anterior</a>
+        </li>
+        {% endif %}
+        {% for page in paginator.page_range %}
+        <li{% if page == page_obj.number %} class="active"{% endif %}>
+            <a href="?page={{ page }}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}" title="">{{ page }}</a>
+        </li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li>
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}" title="">Próxima</a>
+        </li>
+        {% endif %}
+    </ul>
+
+  <!-- Footer -->
+  <footer class="w3-container w3-padding-16 w3-light-grey">
+  </footer>
+{% endblock %}

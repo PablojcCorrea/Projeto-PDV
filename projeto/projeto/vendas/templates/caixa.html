@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-container">
+  		<h2>Caixa</h2>
+	</div>
+	<div class="w3-row-padding w3-margin-bottom">
+	    <a href="{% url 'nova_venda' %}">
+	    <div class="w3-quarter">
+	      <div class="w3-container w3-green w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+	        <div class="w3-center">
+	          <i class="fa fa-plus w3-xxlarge"></i>
+	          <h4>Nova venda</h4>
+	        </div>
+	      </div>
+	    </div>
+	    </a>
+
+	    <a href="{% url 'nova_despesa' pk=caixa.pk %}">
+	    <div class="w3-quarter">
+	      <div class="w3-container w3-teal w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+	        <div class="w3-center">
+	          <i class="fa fa-plus w3-xxlarge"></i>
+	          <h4>Cadastrar Despesa</h4>
+	        </div>
+	      </div>
+	    </div>
+	    </a>
+
+	    <a href="{% url 'nova_sangria' pk=caixa.pk %}">
+	    <div class="w3-quarter">
+	      <div class="w3-container w3-orange w3-text-white w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+	        <div class="w3-center">
+	          <i class="fa fa-plus w3-xxlarge"></i>
+	          <h4>Cadastrar Sangria</h4>
+	        </div>
+	      </div>
+	    </div>
+	    </a>
+
+	    <a href="{% url 'vendas_do_caixa' pk=caixa.pk %}">
+	    <div class="w3-quarter">
+	      <div class="w3-container w3-dark-gray w3-padding-16" style="margin-left: 10px; margin-right: 10px">
+	        <div class="w3-center">
+	          <i class="fa fa-plus w3-xxlarge"></i>
+	          <h4>Consultar Transações</h4>
+	        </div>
+	      </div>
+	    </div>
+	    </a>
+	  </div>
+	<form class="w3-container w3-padding" action="{% url 'caixa' %}" method="POST">
+		{% csrf_token %}
+		<div class="w3-container w3-margin">
+			<div class="w3-half">
+				<table class="w3-table-all w3-hoverable">
+					<thead>
+						<tr class="w3-blue-grey">
+							<th colspan="2">Informações gerais:</th>
+						</tr>
+					</thead>
+					<tr class="w3-center">
+						<td><strong>Vendedor:</strong></td>
+						<td><strong>{{ vendedor.0.nome_pf }} {{ vendedor.0.sobrenome_pf }}</strong></td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Fundo do caixa:</strong></td>
+						<td>R$ {{ caixa.fundo_caixa }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Sangrias:</strong></td>
+						<td>R$ {{ sangria }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Despesas:</strong></td>
+						<td>R$ {{ despesa }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Produtos vendidos:</strong></td>
+						<td>{{ produtos_vendidos }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Dinheiro no caixa:</strong></td>
+						<td>R$ {{ dinheiro_caixa }}</td>
+					</tr>
+				</table>
+			</div>
+			<div class="w3-half">
+				<table class="w3-table-all w3-hoverable">
+					<thead>
+						<tr class="w3-blue-grey">
+							<th colspan="2">Vendas por forma de pagamento:</th>
+						</tr>
+					</thead>
+					<tr class="w3-center">
+						<td><strong>Dinheiro</strong></td>
+						<td>R$ {{ total_dinheiro }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Débito</strong></td>
+						<td>R$ {{ total_debito }}</td>
+					</tr>
+					<tr class="w3-center">
+						<td><strong>Crédito</strong></td>
+						<td>R$ {{ total_credito }}</td>
+					</tr>
+				</table>
+				<table class="w3-table-all w3-hoverable">
+					<thead>
+						<tr class="w3-blue-grey">
+							<th>Total de Vendas:</th>
+						</tr>
+					</thead>
+					<tr style="height: 100px;" class="w3-center">
+						<td><h2>R$ {{ total_caixa }}</h2></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<hr>
+		<div class="w3-container">
+			<div class="w3-container">
+				<button class="w3-button w3-green w3-right" name="fechar_caixa" value="fechar_caixa">Fechar Caixa</button>
+			</div>
+		</div>
+	</form>
+{% endblock %}
