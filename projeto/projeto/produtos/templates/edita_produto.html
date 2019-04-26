@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-container w3-light-gray">
+  		<h2>Cadastro de Produtos</h2>
+	</div>
+	<form class="w3-row-padding" method="POST">
+		<div class="w3-container w3-border">
+			{% csrf_token %}
+				<p>
+					{% for element in form %}
+					{% if element == form.nome_produto or element == form.descricao_produto %}
+						<div class="w3-container">
+							{{ element.errors }}
+							{{ element.label_tag }}
+							{{ element }}
+						</div>
+					{% elif element == form.categoria or element == form.fornecedor %}
+						<div class="w3-margin w3-third">
+							{{ element.errors }}
+							{{ element.label_tag }}
+							{{ element }}
+						</div>
+					{% else %}
+						<div class="w3-quarter w3-margin" style="width: 200px">
+							{{ element.errors }}
+							{{ element.label_tag }}
+							{{ element }}
+						</div>
+					{% endif %}
+					{% endfor %}
+				</p>
+		</div>
+		<br>
+
+		<div class="w3-half">
+			<button class="w3-button w3-green" style="width: 100px">Salvar</button>
+		<div>
+	</form>
+{% endblock %}

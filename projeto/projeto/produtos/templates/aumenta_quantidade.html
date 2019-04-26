@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <title>Ponto de Venda - Ideias Mais Criativas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+    </style>
+
+    <script>
+        function calculaValorTotal() {
+            preco_custo = document.getElementById("id_preco_custo").value;
+            quantidade = document.getElementById("id_quantidade_produto").value;
+            
+            total = preco_custo * quantidade
+
+            document.getElementById("id_valor_total_aquisicao").value = total;
+
+        }
+
+        function calculaPrecoVenda() {
+            preco_custo = document.getElementById("id_preco_custo").value;
+            porcentagem_lucro = document.getElementById("id_porcentagem_lucro").value;
+            
+            lucro = parseFloat(preco_custo) * (parseFloat(porcentagem_lucro) / 100);
+
+            document.getElementById("id_preco_venda").value = parseFloat(preco_custo) + parseFloat(lucro);
+
+            calculaValorTotal();
+        }
+
+        function calculaPorcentagem() {
+            preco_custo = document.getElementById("id_preco_custo").value;
+            preco_venda = document.getElementById("id_preco_venda").value;
+            
+            porcentagem = (preco_venda / preco_custo) * 100 - 100;
+
+            document.getElementById("id_porcentagem_lucro").value = porcentagem;
+        }
+    </script>
+    <body class="w3-blue-gray">
+        <div class="w3-display-middle w3-light-gray w3-padding w3-round w3-card-4 w3-half">
+            <form class="w3-container" method="post">
+                {% csrf_token %}
+                <div style="margin: 10%">
+                    <h3>Informações do Produto</h3>
+                    <table class="w3-table-all w3-hoverable">
+                        <thead>
+                            <tr class="w3-blue-grey">
+                                <th>Produto</th>
+                                <th>Categoria</th>
+                                <th>Em estoque</th>
+                            </tr>
+                        </thead>
+                        <tr class="w3-center">
+                            <td><strong>{{ produto.0.nome_produto }}</strong></td>
+                            <td>{{ produto.0.categoria.nome_categoria }}</td>
+                            <td>{{ produto.0.quantidade }}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="w3-third w3-margin-right" onkeyup="calculaValorTotal();">
+                        {{ form.quantidade_produto.errors }}
+                        {{ form.quantidade_produto.label_tag }}
+                        {{ form.quantidade_produto }}
+                    </div>
+                    <div class="w3-half" onkeyup="calculaPrecoVenda()">
+                        {{ form.preco_custo.errors }}
+                        {{ form.preco_custo.label_tag }}
+                        {{ form.preco_custo }}
+                    </div>
+                    <div class="w3-third w3-margin-right" onkeyup="calculaPrecoVenda();">
+                        {{ form.porcentagem_lucro.errors }}
+                        {{ form.porcentagem_lucro.label_tag }}
+                        {{ form.porcentagem_lucro }}
+                    </div>
+                    <div class="w3-half" onkeyup="calculaPorcentagem()">
+                        {{ form.preco_venda.errors }}
+                        {{ form.preco_venda.label_tag }}
+                        {{ form.preco_venda }}
+                    </div>
+                    <div class="w3-third w3-margin-right">
+                        {{ form.valor_total_aquisicao.errors }}
+                        <label>Total Pago:</label>
+                        {{ form.valor_total_aquisicao }}
+                    </div>
+                    <div class="w3-half ">
+                        {{ form.data_pagamento.errors }}
+                        {{ form.data_pagamento.label_tag }}
+                        {{ form.data_pagamento }}
+                    </div>
+                    <button type="submit" class="w3-button w3-green w3-margin-top" style="width: 100%">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

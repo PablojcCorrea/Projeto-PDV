@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+  
+  <script type="text/javascript">
+    let array = {% autoescape off %}{{json_list}}{%endautoescape%}
+
+    array.forEach(function(metricas) {
+      metricas.forEach(function(metrica){
+        console.log(metrica)
+      });
+    });
+
+function buildTableBody(data, columns) {
+    var body = [];
+
+    body.push(columns);
+
+    data.forEach(function(row) {
+        var dataRow = [];
+
+        columns.forEach(function(column) {
+            dataRow.push(row[column].toString());
+        })
+
+        body.push(dataRow);
+    });
+
+    return body;
+}
+
+function table(data, columns) {
+    return {
+        table: {
+            headerRows: 1,
+            body: buildTableBody(data, columns)
+        }
+    };
+}
+
+var dd = {
+    content: [
+        { text: 'Dynamic parts', style: 'header' },
+        {% autoescape off%}
+        '{{ json_list }}'
+        {% endautoescape %}
+    ]
+}
+      pdfMake.createPdf(dd).open();
+
+
+  </script>
+  <form id="searchform" action="" method="POST" accept-charset="utf-8">
+    <h2>Buscar vendas por data</h2>
+    {% csrf_token %}
+    <div class="w3-container">
+      <div class="w3-container">
+        <div class="w3-half">
+          <label>Data inicial</label>
+          <div>
+            <div class="w3-container w3-threequarter">
+              <input name="data_inicial" type="date" class="w3-input">
+            </div> 
+          </div>
+        </div>
+        <div class="w3-half">
+          <label>Data final</label>
+          <div>
+            <div class="w3-container w3-threequarter">
+              <input name="data_final" type="date" class="w3-input">
+            </div>
+            <div class="w3-container w3-quarter">
+              <button class="w3-button w3-green" name="adicionar_produto" value="add_produto"><i class="fa fa-search"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div id="relatorio" class="w3-container">
+    <div class="w3-container">
+      <h4>Relatório de Vendas</h4>
+    </div>
+
+   <div class="w3-container"><table class="w3-table">
+    {% for metricas in metricas_mensais %}
+      <thead>
+        <tr class="w3-border-bottom w3-dark-gray">
+          <th class="w3-border">Descrição</th>
+          <th class="w3-border">Data</th>
+          <th class="w3-border">Receita</th>
+          <th class="w3-border">Despesa</th>
+          <th class="w3-border">Total</th>
+        </tr>
+      </thead>
+    {% for metrica in metricas %}
+      <tr class="w3-border">
+        {% if metrica.valor_movimentacao %}
+          <td class="w3-border w3-white">Movimentacao</td>
+          <td class="w3-border w3-white">{{ metrica.dia }}</td>
+          <td class="w3-border w3-white">R$ 0,00</td>
+          <td class="w3-border w3-white w3-text-red">R$ {{ metrica.valor_movimentacao }}</td>
+        {% elif metrica.valor_despesa %}
+          <td class="w3-border w3-white">Despesa</td>
+          <td class="w3-border w3-white">{{ metrica.data_pagamento_despesa }}</td>
+          <td class="w3-border w3-white">R$ 0,00</td>
+          <td class="w3-border w3-white w3-text-red">R$ {{ metrica.valor_despesa }}</td>
+        {% elif metrica.valor_total_aquisicao %}
+          <td class="w3-border w3-white">Aquisicao</td>
+          <td class="w3-border w3-white">{{ metrica.data_pagamento }}</td>
+          <td class="w3-border w3-white">R$ 0,00</td>
+          <td class="w3-border w3-white w3-text-red">R$ {{ metrica.valor_total_aquisicao }}</td>
+        {% else %}
+          <td class="w3-border w3-white">Total de Vendas Diário</td>
+          <td class="w3-border w3-white">{{ metrica.dia }}</td>
+          <td class="w3-border w3-white"><strong>R$ {{ metrica.soma }}</strong></td>
+          <td class="w3-border w3-white">R$ 0,00</td>
+        {% endif %}
+        <td class="w3-white"> - </td>
+      </tr>
+    {% endfor %}
+  {% endfor %}
+      <tr class="w3-border">
+        <td colspan="2" class="w3-border w3-white">Total:</td>
+        <td class="w3-border w3-text-green">R$ 1200,00</td>
+        <td class="w3-border w3-text-red">R$ 1200,00</td>
+        <td class="w3-white"><strong>R$ 0,00</strong></td>
+      </tr>
+      </table>
+      
+    </div>
+    <hr>
+  </div>
+{% endblock %}

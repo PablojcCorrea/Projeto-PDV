@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <hr><hr>
+  <form id="searchform" action="" method="POST" accept-charset="utf-8">
+    {% csrf_token %}
+    <div class="w3-container w3-margin w3-border w3-padding">
+      <div class="w3-container">
+        <div class="w3-container w3-margin w3-padding">
+          <input type="radio" name="tipo_relatorio" value="todos_produtos" checked>
+          <label>Relatório de Produtos Vendidos - Geral</label>
+          <hr>
+          <input type="radio" name="tipo_relatorio" value="todas_aquisicoes">
+          <label>Relatório de compras de Produtos - Geral</label>
+        </div>
+        <div class="w3-container">
+          <button class="w3-button w3-green w3-right">Gerar Relatório</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  {% if produtos %}
+  <div id="relatorio_produtos" class="w3-container">
+    <div class="w3-container">
+      <h4>Relatório de Produtos</h4>
+    </div>
+    <div class="w3-container w3-margin">
+    <table class="w3-table-all w3-hoverable w3-padding">
+    <tr class="w3-grey">
+      <th>Produto</th>
+      <th>QTDE Estoque</th>
+      <th>QTDE Vendida</th>
+      <th>Estoque Mínimo</th>
+      <th>Valor Compra</th>
+      <th>Valor Venda</th>
+      <th>Subtotal</th>
+    </tr>
+    {% for produto in produtos %}
+        <tr>
+          <td>{{ produto.produto.nome_produto }}</td>
+          <td>{{ produto.produto.quantidade }}</td>
+          <td>{{ produto.quantidade_produto }}</td>
+          <td>{{ produto.produto.estoque_minimo }}</td>
+          <td>R$ {{ produto.produto.preco_custo }}</td>
+          <td>R$ {{ produto.valor_produto }}</td>
+          <td>R$ {{ produto.subtotal_venda }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    </div>
+  </div>
+  {% endif %}
+  <hr>
+  {% if aquisicoes %}
+  <div id="relatorio_aquisicoes" class="w3-container">
+    <div class="w3-container">
+      <h4>Relatório de Produtos</h4>
+    </div>
+    <div class="w3-container w3-margin">
+    <table class="w3-table-all w3-hoverable">
+      <thead>
+        <tr class="w3-grey">
+          <th>Data da Aquisição</th>
+          <th>Produto Adquirido</th>
+          <th>Quantidade Adquirida</th>
+          <th>Realizada por</th>
+
+        </tr>
+      </thead>
+      {% for aq in aquisicoes %}
+      <tr class="w3-center">
+        <td><strong>{{ aq.data_aquisicao }}</strong></td>
+        <td>{{ aq.produto_adquirido.nome_produto }}</td>
+        <td>{{ aq.quantidade_produto }}</td>
+        <td>{{ aq.funcionario.nome_pf }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <form id="searchform" action="" method="POST" accept-charset="utf-8">
+    <h2>Buscar vendas por data</h2>
+    {% csrf_token %}
+    <div class="w3-container">
+      <div class="w3-container">
+        <div class="w3-half">
+          <label>Data inicial</label>
+          <div>
+            <div class="w3-container w3-threequarter">
+              <input name="data_inicial" type="date" class="w3-input">
+            </div> 
+          </div>
+        </div>
+        <div class="w3-half">
+          <label>Data final</label>
+          <div>
+            <div class="w3-container w3-threequarter">
+              <input name="data_final" type="date" class="w3-input">
+            </div>
+            <div class="w3-container w3-quarter">
+              <button class="w3-button w3-green" name="adicionar_produto" value="add_produto"><i class="fa fa-search"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div id="relatorio" class="w3-container">
+    <div class="w3-container">
+      <h4>Relatório de Vendas</h4>
+    </div>
+    {% for venda in vendas %}
+   <div class="w3-container"><table class="w3-table">
+      <thead>
+        <tr class="w3-border-bottom">
+          <th>Venda</th>
+          <th>Data</th>
+          <th>Cliente</th>
+          <th>Vendedor</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tr class="w3-center">
+        <td>{{ venda.pk }}</td>
+        <td>{{ venda.criado_em.date }}</td>
+        {% if venda.cliente_pf %}
+          <td>{{ venda.cliente_pf.nome_pf }} {{ venda.cliente_pf.sobrenome_pf }} </td>
+        {% elif venda.cliente_pj %}
+          <td>{{ venda.cliente_pj.razao_social }}</td>
+        {% else %}
+          <td>Cliente sem cadastro</td>
+        {% endif %}
+        <td>{{ venda.vendedor.nome_pf }}</td>
+        <td>R$ {{ venda.valor_total }}</td>
+      </tr>
+      </table>
+      <div class="w3-container w3-margin">
+      <table class="w3-table-all w3-hoverable w3-paddin">
+      <tr class="w3-grey">
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Valor</th>
+        <th>SubTotal</th>
+      </tr>
+      {% for produto in produtos %}
+        {% if produto.venda == venda%}
+          <tr>
+            <th>{{ produto.produto.nome_produto }}</th>
+            <th>{{ produto.quantidade_produto }}</th>
+            <th>R$ {{ produto.valor_produto }}</th>
+            <th>R$ {{ produto.subtotal_venda }}</th>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      </table>
+      </div>
+      <a href="{% url 'comprovante_venda' pk=venda.pk %}"" class="w3-button w3-grey w3-right">Comprovante da venda</a>
+    </div>
+    <hr>
+    {% endfor %}
+  </div>
+{% endblock %}
